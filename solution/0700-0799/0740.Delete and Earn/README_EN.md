@@ -42,15 +42,13 @@ Then, delete 3 again to earn 3 points, and 3 again to earn 3 points.
 
 ## Solutions
 
-<!-- tabs:start -->
-
 Intuition: **If we take a number, we will take all of the copies of it**.
 
 First calculate the sum of each number as **sums**, and keep updating two dp arrays: **select** and **nonSelect**
 
-- sums[i] represents the sum of elements whose value is i;
-- select[i] represents the maximum sum of processing from 0 to i if the number i is selected;
-- nonSelect[i] represents the maximum sum of processing from 0 to i if the number i is not selected;
+- `sums[i]` represents the sum of elements whose value is i;
+- `select[i]` represents the maximum sum of processing from 0 to i if the number i is selected;
+- `nonSelect[i]` represents the maximum sum of processing from 0 to i if the number i is not selected;
 
 Then we have the following conclusions:
 
@@ -62,10 +60,26 @@ select[i] = nonSelect[i-1] + sums[i];
 nonSelect[i] = Math.max(select[i-1], nonSelect[i-1]);
 ```
 
+<!-- tabs:start -->
+
 ### **Python3**
 
 ```python
-
+class Solution:
+    def deleteAndEarn(self, nums: List[int]) -> int:
+        mx = float('-inf')
+        for num in nums:
+            mx = max(mx, num)
+        total = [0] * (mx + 1)
+        for num in nums:
+            total[num] += num
+        first = total[0]
+        second = max(total[0], total[1])
+        for i in range(2, mx + 1):
+            cur = max(first + total[i], second)
+            first = second
+            second = cur
+        return second
 ```
 
 ### **Java**
@@ -94,6 +108,62 @@ class Solution {
         return Math.max(select[maxV], nonSelect[maxV]);
     }
 }
+```
+
+### **Go**
+
+```go
+func deleteAndEarn(nums []int) int {
+
+	max := func(x, y int) int {
+		if x > y {
+			return x
+		}
+		return y
+	}
+
+	mx := math.MinInt32
+	for _, num := range nums {
+		mx = max(mx, num)
+	}
+	total := make([]int, mx+1)
+	for _, num := range nums {
+		total[num] += num
+	}
+	first := total[0]
+	second := max(total[0], total[1])
+	for i := 2; i <= mx; i++ {
+		cur := max(first+total[i], second)
+		first = second
+		second = cur
+	}
+	return second
+}
+```
+
+### **C++**
+
+```cpp
+class Solution {
+public:
+    int deleteAndEarn(vector<int>& nums) {
+        vector<int> vals(10010);
+        for (int& num : nums) {
+            vals[num] += num;
+        }
+        return rob(vals);
+    }
+
+    int rob(vector<int>& nums) {
+        int a = 0, b = nums[0];
+        for (int i = 1; i < nums.size(); ++i) {
+            int c = max(nums[i] + a, b);
+            a = b;
+            b = c;
+        }
+        return b;
+    }
+};
 ```
 
 ### **...**

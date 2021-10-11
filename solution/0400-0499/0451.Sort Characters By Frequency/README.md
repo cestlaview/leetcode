@@ -50,10 +50,11 @@
 注意&#39;A&#39;和&#39;a&#39;被认为是两种不同的字符。
 </pre>
 
-
 ## 解法
 
 <!-- 这里可写通用的实现逻辑 -->
+
+“计数器 + 桶”实现。其中，计数器统计字符串中每个字符出现的次数。而对于桶，第 i 个位置存放出现次数为 i 的所有字符。
 
 <!-- tabs:start -->
 
@@ -62,7 +63,18 @@
 <!-- 这里可写当前语言的特殊实现逻辑 -->
 
 ```python
-
+class Solution:
+    def frequencySort(self, s: str) -> str:
+        counter = collections.Counter(s)
+        buckets = collections.defaultdict(list)
+        for c, freq in counter.items():
+            buckets[freq].append(c)
+        res = []
+        for i in range(len(s), -1, -1):
+            if buckets[i]:
+                for c in buckets[i]:
+                    res.append(c * i)
+        return ''.join(res)
 ```
 
 ### **Java**
@@ -70,7 +82,62 @@
 <!-- 这里可写当前语言的特殊实现逻辑 -->
 
 ```java
+class Solution {
+    public String frequencySort(String s) {
+        Map<Character, Integer> counter = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            counter.put(c, counter.getOrDefault(c, 0) + 1);
+        }
+        List<Character>[] buckets = new List[s.length() + 1];
+        for (Map.Entry<Character, Integer> entry : counter.entrySet()) {
+            char c = entry.getKey();
+            int freq = entry.getValue();
+            if (buckets[freq] == null) {
+                buckets[freq] = new ArrayList<>();
+            }
+            buckets[freq].add(c);
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = s.length(); i >= 0; --i) {
+            if (buckets[i] != null) {
+                for (char c : buckets[i]) {
+                    for (int j = 0; j < i; ++j) {
+                        sb.append(c);
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
+}
+```
 
+### **Go**
+
+用结构体排序进行模拟
+
+```go
+type pair struct {
+	b   byte
+	cnt int
+}
+
+func frequencySort(s string) string {
+	freq := make(map[byte]int)
+	for _, r := range s {
+		freq[byte(r)]++
+	}
+	a := make([]pair, 0)
+	for k, v := range freq {
+		a = append(a, pair{b: k, cnt: v})
+	}
+	sort.Slice(a, func(i, j int) bool { return a[i].cnt > a[j].cnt })
+	var sb strings.Builder
+	for _, p := range a {
+		sb.Write(bytes.Repeat([]byte{p.b}, p.cnt))
+	}
+	return sb.String()
+}
 ```
 
 ### **...**

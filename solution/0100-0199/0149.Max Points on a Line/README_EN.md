@@ -31,7 +31,6 @@
 	<li>All the <code>points</code> are <strong>unique</strong>.</li>
 </ul>
 
-
 ## Solutions
 
 <!-- tabs:start -->
@@ -39,13 +38,113 @@
 ### **Python3**
 
 ```python
+class Solution:
+    def maxPoints(self, points: List[List[int]]) -> int:
+        def gcd(a, b) -> int:
+            return a if b == 0 else gcd(b, a % b)
 
+        n = len(points)
+        if n < 3:
+            return n
+        res = 0
+        for i in range(n - 1):
+            counter = collections.Counter()
+            t_max = duplicate = 0
+            for j in range(i + 1, n):
+                delta_x = points[i][0] - points[j][0]
+                delta_y = points[i][1] - points[j][1]
+                if delta_x == 0 and delta_y == 0:
+                    duplicate += 1
+                    continue
+                g = gcd(delta_x, delta_y)
+                d_x = delta_x // g
+                d_y = delta_y // g
+                key = f'{d_x}.{d_y}'
+                counter[key] += 1
+                t_max = max(t_max, counter[key])
+            res = max(res, t_max + duplicate + 1)
+        return res
 ```
 
 ### **Java**
 
 ```java
+class Solution {
+    public int maxPoints(int[][] points) {
+        int n = points.length;
+        if (n < 3) {
+            return n;
+        }
+        int res = 0;
+        for (int i = 0; i < n - 1; ++i) {
+            Map<String, Integer> kCounter = new HashMap<>();
+            int max = 0;
+            int duplicate = 0;
+            for (int j = i + 1; j < n; ++j) {
+                int deltaX = points[i][0] - points[j][0];
+                int deltaY = points[i][1] - points[j][1];
+                if (deltaX == 0 && deltaY == 0) {
+                    ++duplicate;
+                    continue;
+                }
+                int gcd = gcd(deltaX, deltaY);
+                int dX = deltaX / gcd;
+                int dY = deltaY / gcd;
+                String key = dX + "." + dY;
+                kCounter.put(key, kCounter.getOrDefault(key, 0) + 1);
+                max = Math.max(max, kCounter.get(key));
+            }
+            res = Math.max(res, max + duplicate + 1);
+        }
+        return res;
+    }
 
+    private int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+}
+```
+
+### **Go**
+
+```go
+func maxPoints(points [][]int) int {
+	type pair struct {
+		first  int
+		second int
+	}
+	n := len(points)
+	if n <= 2 {
+		return n
+	}
+	ans := 0
+	for i := 0; i < n-1; i++ {
+		freq := make(map[pair]int)
+		for j := i + 1; j < n; j++ {
+			x1, y1, x2, y2 := points[i][0], points[i][1], points[j][0], points[j][1]
+			dx, dy := x2-x1, y2-y1
+			g := gcd(dx, dy)
+			p := pair{dx / g, dy / g}
+			freq[p]++
+			ans = max(ans, freq[p]+1)
+		}
+	}
+	return ans
+}
+
+func gcd(a, b int) int {
+	for b != 0 {
+		a, b = b, a%b
+	}
+	return a
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
 ```
 
 ### **...**

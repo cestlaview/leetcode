@@ -18,7 +18,7 @@
 
 <pre>
 <strong>输入：</strong>n = <code>12</code>
-<strong>输出：</strong>3 
+<strong>输出：</strong>3
 <strong>解释：</strong><code>12 = 4 + 4 + 4</code></pre>
 
 <p><strong>示例 2：</strong></p>
@@ -40,6 +40,8 @@
 
 <!-- 这里可写通用的实现逻辑 -->
 
+动态规划，定义 `dp[i]` 表示和为 `i` 的完全平方数的最少数量。
+
 <!-- tabs:start -->
 
 ### **Python3**
@@ -47,7 +49,16 @@
 <!-- 这里可写当前语言的特殊实现逻辑 -->
 
 ```python
-
+class Solution:
+    def numSquares(self, n: int) -> int:
+        dp = [0] * (n + 1)
+        for i in range(1, n + 1):
+            j, mi = 1, float('inf')
+            while j * j <= i:
+                mi = min(mi, dp[i - j * j])
+                j += 1
+            dp[i] = mi + 1
+        return dp[-1]
 ```
 
 ### **Java**
@@ -55,7 +66,77 @@
 <!-- 这里可写当前语言的特殊实现逻辑 -->
 
 ```java
+class Solution {
+    public int numSquares(int n) {
+        int[] dp = new int[n + 1];
+        for (int i = 1; i <= n; ++i) {
+            int mi = Integer.MAX_VALUE;
+            for (int j = 1; j * j <= i; ++j) {
+                mi = Math.min(mi, dp[i - j * j]);
+            }
+            dp[i] = mi + 1;
+        }
+        return dp[n];
+    }
+}
+```
 
+### **C++**
+
+```cpp
+class Solution {
+public:
+    int numSquares(int n) {
+        vector<int> dp(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            int mi = 100000;
+            for (int j = 1; j * j <= i; ++j) {
+                mi = min(mi, dp[i - j * j]);
+            }
+            dp[i] = mi + 1;
+        }
+        return dp[n];
+    }
+};
+```
+
+### **TypeScript**
+
+```ts
+function numSquares(n: number): number {
+    let dp = new Array(n + 1).fill(0);
+    for (let i = 1; i <= n; ++i) {
+        let min = Infinity;
+        for (let j = 1; j * j <= i; ++j) {
+            min = Math.min(min, dp[i - j * j]);
+        }
+        dp[i] = min + 1;
+    }
+    return dp.pop();
+};
+```
+
+### **Go**
+
+```go
+func numSquares(n int) int {
+	dp := make([]int, n+1)
+	for i := 1; i <= n; i++ {
+		mi := 100000
+		for j := 1; j*j <= i; j++ {
+			mi = min(mi, dp[i-j*j])
+		}
+		dp[i] = mi + 1
+	}
+	return dp[n]
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
 ```
 
 ### **...**

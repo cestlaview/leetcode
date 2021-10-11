@@ -28,14 +28,14 @@
 
 <pre><strong>输入：</strong>inputs = [&quot;TimeMap&quot;,&quot;set&quot;,&quot;get&quot;,&quot;get&quot;,&quot;set&quot;,&quot;get&quot;,&quot;get&quot;], inputs = [[],[&quot;foo&quot;,&quot;bar&quot;,1],[&quot;foo&quot;,1],[&quot;foo&quot;,3],[&quot;foo&quot;,&quot;bar2&quot;,4],[&quot;foo&quot;,4],[&quot;foo&quot;,5]]
 <strong>输出：</strong>[null,null,&quot;bar&quot;,&quot;bar&quot;,null,&quot;bar2&quot;,&quot;bar2&quot;]
-<strong>解释：</strong>&nbsp; 
-TimeMap kv; &nbsp; 
-kv.set(&quot;foo&quot;, &quot;bar&quot;, 1); // 存储键 &quot;foo&quot; 和值 &quot;bar&quot; 以及时间戳 timestamp = 1 &nbsp; 
-kv.get(&quot;foo&quot;, 1);  // 输出 &quot;bar&quot; &nbsp; 
-kv.get(&quot;foo&quot;, 3); // 输出 &quot;bar&quot; 因为在时间戳 3 和时间戳 2 处没有对应 &quot;foo&quot; 的值，所以唯一的值位于时间戳 1 处（即 &quot;bar&quot;） &nbsp; 
-kv.set(&quot;foo&quot;, &quot;bar2&quot;, 4); &nbsp; 
-kv.get(&quot;foo&quot;, 4); // 输出 &quot;bar2&quot; &nbsp; 
-kv.get(&quot;foo&quot;, 5); // 输出 &quot;bar2&quot; &nbsp; 
+<strong>解释：</strong>&nbsp;
+TimeMap kv; &nbsp;
+kv.set(&quot;foo&quot;, &quot;bar&quot;, 1); // 存储键 &quot;foo&quot; 和值 &quot;bar&quot; 以及时间戳 timestamp = 1 &nbsp;
+kv.get(&quot;foo&quot;, 1);  // 输出 &quot;bar&quot; &nbsp;
+kv.get(&quot;foo&quot;, 3); // 输出 &quot;bar&quot; 因为在时间戳 3 和时间戳 2 处没有对应 &quot;foo&quot; 的值，所以唯一的值位于时间戳 1 处（即 &quot;bar&quot;） &nbsp;
+kv.set(&quot;foo&quot;, &quot;bar2&quot;, 4); &nbsp;
+kv.get(&quot;foo&quot;, 4); // 输出 &quot;bar2&quot; &nbsp;
+kv.get(&quot;foo&quot;, 5); // 输出 &quot;bar2&quot; &nbsp;
 
 </pre>
 
@@ -57,10 +57,11 @@ kv.get(&quot;foo&quot;, 5); // 输出 &quot;bar2&quot; &nbsp;
 	<li><code>TimeMap.set</code> 和&nbsp;<code>TimeMap.get</code>&nbsp;函数在每个测试用例中将（组合）调用总计&nbsp;<code>120000</code> 次。</li>
 </ol>
 
-
 ## 解法
 
 <!-- 这里可写通用的实现逻辑 -->
+
+嵌套哈希表实现。
 
 <!-- tabs:start -->
 
@@ -69,7 +70,31 @@ kv.get(&quot;foo&quot;, 5); // 输出 &quot;bar2&quot; &nbsp;
 <!-- 这里可写当前语言的特殊实现逻辑 -->
 
 ```python
+class TimeMap:
 
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.ktv = collections.defaultdict(list)
+
+    def set(self, key: str, value: str, timestamp: int) -> None:
+        self.ktv[key].append((timestamp, value))
+
+    def get(self, key: str, timestamp: int) -> str:
+        if key not in self.ktv:
+            return ''
+        tv = self.ktv[key]
+        # #查找第一个大于timestamp的
+        i = bisect.bisect_right(tv, (timestamp, chr(127)))
+        return tv[i - 1][1] if i else ''
+
+
+
+# Your TimeMap object will be instantiated and called as such:
+# obj = TimeMap()
+# obj.set(key,value,timestamp)
+# param_2 = obj.get(key,timestamp)
 ```
 
 ### **Java**
@@ -77,7 +102,69 @@ kv.get(&quot;foo&quot;, 5); // 输出 &quot;bar2&quot; &nbsp;
 <!-- 这里可写当前语言的特殊实现逻辑 -->
 
 ```java
+class TimeMap {
+    private Map<String, TreeMap<Integer, String>> ktv;
 
+    /** Initialize your data structure here. */
+    public TimeMap() {
+        ktv = new HashMap<>();
+    }
+    
+    public void set(String key, String value, int timestamp) {
+        ktv.computeIfAbsent(key, k -> new TreeMap<>()).put(timestamp, value);
+    }
+    
+    public String get(String key, int timestamp) {
+        if (!ktv.containsKey(key)) {
+            return "";
+        }
+        TreeMap<Integer, String> tv = ktv.get(key);
+        Integer t = tv.floorKey(timestamp);
+        return t == null ? "" : tv.get(t);
+    }
+}
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap obj = new TimeMap();
+ * obj.set(key,value,timestamp);
+ * String param_2 = obj.get(key,timestamp);
+ */
+```
+
+### **Go**
+
+因为 timestamp 是一直增长的，所以可以用二分查找快速找到值
+
+```go
+type pair struct {
+	timestamp int
+	value     string
+}
+
+type TimeMap struct {
+	data map[string][]pair
+}
+
+func Constructor() TimeMap {
+	return TimeMap{data: make(map[string][]pair)}
+}
+
+func (m *TimeMap) Set(key string, value string, timestamp int) {
+	m.data[key] = append(m.data[key], pair{timestamp, value})
+}
+
+func (m *TimeMap) Get(key string, timestamp int) string {
+	pairs := m.data[key]
+	// sort.Search return the smallest index i in [0, n) at which f(i) is true
+	i := sort.Search(len(pairs), func(i int) bool {
+		return pairs[i].timestamp > timestamp
+	})
+	if i > 0 {
+		return pairs[i-1].value
+	}
+	return ""
+}
 ```
 
 ### **...**

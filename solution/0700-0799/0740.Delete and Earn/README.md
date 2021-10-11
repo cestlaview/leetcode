@@ -17,7 +17,7 @@
 <pre>
 <strong>输入:</strong> nums = [3, 4, 2]
 <strong>输出:</strong> 6
-<strong>解释:</strong> 
+<strong>解释:</strong>
 删除 4 来获得 4 个点数，因此 3 也被删除。
 之后，删除 2 来获得 2 个点数。总共获得 6 个点数。
 </pre>
@@ -27,7 +27,7 @@
 <pre>
 <strong>输入:</strong> nums = [2, 2, 3, 3, 3, 4]
 <strong>输出:</strong> 9
-<strong>解释:</strong> 
+<strong>解释:</strong>
 删除 3 来获得 3 个点数，接着要删除两个 2 和 4 。
 之后，再次删除 3 获得 3 个点数，再次删除 3 获得 3 个点数。
 总共获得 9 个点数。
@@ -45,15 +45,13 @@
 
 <!-- 这里可写通用的实现逻辑 -->
 
-<!-- tabs:start -->
-
 核心思路: **一个数字要么不选，要么全选**
 
 首先计算出每个数字的总和 sums，并维护两个 dp 数组：select 和 nonSelect
 
-- sums[i] 代表值为 i 的元素总和
-- select[i] 代表如果选数字 i，从 0 处理到 i 的最大和
-- nonSelect[i] 代表如果不选数字 i，从 0 处理到 i 的最大和
+- `sums[i]` 代表值为 i 的元素总和
+- `select[i]` 代表如果选数字 i，从 0 处理到 i 的最大和
+- `nonSelect[i]` 代表如果不选数字 i，从 0 处理到 i 的最大和
 
 那么我们有以下逻辑：
 
@@ -65,12 +63,28 @@ select[i] = nonSelect[i-1] + sums[i];
 nonSelect[i] = Math.max(select[i-1], nonSelect[i-1]);
 ```
 
+<!-- tabs:start -->
+
 ### **Python3**
 
 <!-- 这里可写当前语言的特殊实现逻辑 -->
 
 ```python
-
+class Solution:
+    def deleteAndEarn(self, nums: List[int]) -> int:
+        mx = float('-inf')
+        for num in nums:
+            mx = max(mx, num)
+        total = [0] * (mx + 1)
+        for num in nums:
+            total[num] += num
+        first = total[0]
+        second = max(total[0], total[1])
+        for i in range(2, mx + 1):
+            cur = max(first + total[i], second)
+            first = second
+            second = cur
+        return second
 ```
 
 ### **Java**
@@ -101,6 +115,62 @@ class Solution {
         return Math.max(select[maxV], nonSelect[maxV]);
     }
 }
+```
+
+### **Go**
+
+```go
+func deleteAndEarn(nums []int) int {
+
+	max := func(x, y int) int {
+		if x > y {
+			return x
+		}
+		return y
+	}
+
+	mx := math.MinInt32
+	for _, num := range nums {
+		mx = max(mx, num)
+	}
+	total := make([]int, mx+1)
+	for _, num := range nums {
+		total[num] += num
+	}
+	first := total[0]
+	second := max(total[0], total[1])
+	for i := 2; i <= mx; i++ {
+		cur := max(first+total[i], second)
+		first = second
+		second = cur
+	}
+	return second
+}
+```
+
+### **C++**
+
+```cpp
+class Solution {
+public:
+    int deleteAndEarn(vector<int>& nums) {
+        vector<int> vals(10010);
+        for (int& num : nums) {
+            vals[num] += num;
+        }
+        return rob(vals);
+    }
+
+    int rob(vector<int>& nums) {
+        int a = 0, b = nums[0];
+        for (int i = 1; i < nums.size(); ++i) {
+            int c = max(nums[i] + a, b);
+            a = b;
+            b = c;
+        }
+        return b;
+    }
+};
 ```
 
 ### **...**

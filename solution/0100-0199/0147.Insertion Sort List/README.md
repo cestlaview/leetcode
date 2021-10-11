@@ -36,7 +36,6 @@
 <strong>输出:</strong> -1-&gt;0-&gt;3-&gt;4-&gt;5
 </pre>
 
-
 ## 解法
 
 <!-- 这里可写通用的实现逻辑 -->
@@ -57,16 +56,14 @@
 ```python
 # Definition for singly-linked list.
 # class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
     def insertionSortList(self, head: ListNode) -> ListNode:
         if head is None or head.next is None:
             return head
-        dummy = ListNode(head.val)
-        dummy.next = head
+        dummy = ListNode(head.val, head)
         pre, cur = dummy, head
         while cur:
             if pre.val <= cur.val:
@@ -93,7 +90,9 @@ class Solution:
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode(int x) { val = x; }
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
 class Solution {
@@ -101,8 +100,7 @@ class Solution {
         if (head == null || head.next == null) {
             return head;
         }
-        ListNode dummy = new ListNode(head.val);
-        dummy.next = head;
+        ListNode dummy = new ListNode(head.val, head);
         ListNode pre = dummy, cur = head;
         while (cur != null) {
             if (pre.val <= cur.val) {
@@ -123,6 +121,44 @@ class Solution {
         return dummy.next;
     }
 }
+```
+
+### **JavaScript**
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var insertionSortList = function(head) {
+    if (head == null || head.next == null) return head;
+    let dummy = new ListNode(head.val, head);
+    let prev = dummy, cur = head;
+    while (cur != null) {
+        if (prev.val <= cur.val) {
+            prev = cur;
+            cur = cur.next;
+            continue;
+        }
+        let p = dummy;
+        while (p.next.val <= cur.val) {
+            p = p.next;
+        }
+        let t = cur.next;
+        cur.next = p.next;
+        p.next = cur;
+        prev.next = t;
+        cur = t;
+    }
+    return dummy.next;
+};
 ```
 
 ### **...**

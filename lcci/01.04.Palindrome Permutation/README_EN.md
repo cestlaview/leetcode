@@ -27,9 +27,7 @@
 ```python
 class Solution:
     def canPermutePalindrome(self, s: str) -> bool:
-        counter = collections.Counter()
-        for c in s:
-            counter[c] += 1
+        counter = collections.Counter(s)
         cnt = 0
         for val in counter.values():
             if (val & 1) == 1:
@@ -60,6 +58,25 @@ class Solution {
         }
         return true;
     }
+}
+```
+
+### **Go**
+
+```go
+func canPermutePalindrome(s string) bool {
+	m := make(map[rune]bool)
+	count := 0
+	for _, r := range s {
+		if m[r] {
+			m[r] = false
+			count--
+		} else {
+			m[r] = true
+			count++
+		}
+	}
+	return count <= 1
 }
 ```
 

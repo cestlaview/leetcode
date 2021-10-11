@@ -50,13 +50,76 @@
 ### **Python3**
 
 ```python
-
+class Solution:
+    def numberOfBoomerangs(self, points: List[List[int]]) -> int:
+        ans = 0
+        for p in points:
+            counter = collections.Counter()
+            for q in points:
+                distance = (p[0] - q[0]) * (p[0] - q[0]) + (p[1] - q[1]) * (p[1] - q[1])
+                counter[distance] += 1
+            ans += sum([val * (val - 1) for val in counter.values()])
+        return ans
 ```
 
 ### **Java**
 
 ```java
+class Solution {
+    public int numberOfBoomerangs(int[][] points) {
+        int ans = 0;
+        for (int[] p : points) {
+            Map<Integer, Integer> counter = new HashMap<>();
+            for (int[] q : points) {
+                int distance = (p[0] - q[0]) * (p[0] - q[0]) + (p[1] - q[1]) * (p[1] - q[1]);
+                counter.put(distance, counter.getOrDefault(distance, 0) + 1);
+            }
+            for (int val : counter.values()) {
+                ans += val * (val - 1);
+            }
+        }
+        return ans;
+    }
+}
+```
 
+### **Go**
+
+```go
+func numberOfBoomerangs(points [][]int) int {
+	ans := 0
+	for _, p := range points {
+		cnt := make(map[int]int)
+		for _, q := range points {
+			cnt[(p[0]-q[0])*(p[0]-q[0])+(p[1]-q[1])*(p[1]-q[1])]++
+		}
+		for _, v := range cnt {
+			ans += v * (v - 1)
+		}
+	}
+	return ans
+}
+```
+
+### **C++**
+
+```cpp
+class Solution {
+public:
+    int numberOfBoomerangs(vector<vector<int>>& points) {
+        int ans = 0;
+        for (const auto& p : points) {
+        unordered_map<int, int> cnt;
+            for (const auto& q : points) {
+                ++cnt[(p[0] - q[0]) * (p[0] - q[0]) + (p[1] - q[1]) * (p[1] - q[1])];
+            }
+            for (const auto& [_, v] : cnt) {
+                ans += v * (v - 1);
+            }
+        }
+        return ans;
+    }
+};
 ```
 
 ### **...**

@@ -74,7 +74,21 @@
 <!-- 这里可写当前语言的特殊实现逻辑 -->
 
 ```python
+# The guess API is already defined for you.
+# @param num, your guess
+# @return -1 if my number is lower, 1 if my number is higher, otherwise return 0
+# def guess(num: int) -> int:
 
+class Solution:
+    def guessNumber(self, n: int) -> int:
+        left, right = 1, n
+        while left < right:
+            mid = (left + right) >> 1
+            if guess(mid) <= 0:
+                right = mid
+            else:
+                left = mid + 1
+        return left
 ```
 
 ### **Java**
@@ -82,7 +96,116 @@
 <!-- 这里可写当前语言的特殊实现逻辑 -->
 
 ```java
+/** 
+ * Forward declaration of guess API.
+ * @param  num   your guess
+ * @return 	     -1 if num is lower than the guess number
+ *			      1 if num is higher than the guess number
+ *               otherwise return 0
+ * int guess(int num);
+ */
 
+public class Solution extends GuessGame {
+    public int guessNumber(int n) {
+        int left = 1, right = n;
+        while (left < right) {
+            int mid = (left + right) >>> 1;
+            if (guess(mid) <= 0) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+}
+```
+
+### **C++**
+
+```cpp
+/** 
+ * Forward declaration of guess API.
+ * @param  num   your guess
+ * @return 	     -1 if num is lower than the guess number
+ *			      1 if num is higher than the guess number
+ *               otherwise return 0
+ * int guess(int num);
+ */
+
+class Solution {
+public:
+    int guessNumber(int n) {
+        int left = 1, right = n;
+        while (left < right) {
+            int mid = left + ((right - left) >> 1);
+            if (guess(mid) <= 0) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+};
+```
+
+### **Go**
+
+```go
+/**
+ * Forward declaration of guess API.
+ * @param  num   your guess
+ * @return 	     -1 if num is lower than the guess number
+ *			      1 if num is higher than the guess number
+ *               otherwise return 0
+ * func guess(num int) int;
+ */
+
+func guessNumber(n int) int {
+	left, right := 1, n
+	for left < right {
+		mid := (left + right) >> 1
+		if guess(mid) <= 0 {
+			right = mid
+		} else {
+			left = mid + 1
+		}
+	}
+	return left
+}
+```
+
+### **C#**
+
+```cs
+/** 
+ * Forward declaration of guess API.
+ * @param  num   your guess
+ * @return 	     -1 if num is lower than the guess number
+ *			      1 if num is higher than the guess number
+ *               otherwise return 0
+ * int guess(int num);
+ */
+
+public class Solution : GuessGame {
+    public int GuessNumber(int n) {
+        int left = 1, right = n;
+        while (left < right)
+        {
+            int mid = left + ((right - left) >> 1);
+            if (guess(mid) <= 0)
+            {
+                right = mid; 
+            }
+            else
+            {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+}
 ```
 
 ### **...**

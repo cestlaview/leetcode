@@ -101,6 +101,30 @@ class Solution {
 }
 ```
 
+### **JavaScript**
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {number[]}
+ */
+var reversePrint = function(head) {
+    let res = [];
+    while (head != null) {
+        res.unshift(head.val);
+        head = head.next;
+    }
+    return res;
+};
+```
+
 ### **Go**
 
 ```go
@@ -123,6 +147,8 @@ func reversePrint(head *ListNode) []int {
 ```
 
 ### **C++**
+
+- 递归实现
 
 ```cpp
 /**
@@ -152,6 +178,53 @@ public:
         // 返回的是全局的ret信息。在getVal函数中被赋值
         return ret;
     }
+};
+```
+
+- 栈实现
+
+```cpp
+class Solution {
+public:
+    vector<int> reversePrint(ListNode* head) {
+        stack<int> stk;
+        vector<int> ans;
+        ListNode *p = head;
+        while (p) {
+            stk.push(p->val);
+            p = p->next;
+        }
+        while (!stk.empty()) {
+            ans.push_back(stk.top());
+            stk.pop();
+        }
+        return ans;
+    }
+};
+```
+
+### **TypeScript**
+
+```ts
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+ function reversePrint(head: ListNode | null): number[] {
+    let res: number[] = [];
+    while (head != null) {
+        res.unshift(head.val);
+        head = head.next;
+    }
+    return res;
 };
 ```
 

@@ -86,19 +86,102 @@ class Solution {
         }
         Set<Integer> s = new HashSet<>();
         s.add(head.val);
-        ListNode p = head.next, cur = head;
-        while (p != null) {
+        ListNode cur = head;
+        for (ListNode p = head.next; p != null; p = p.next) {
             if (!s.contains(p.val)) {
                 cur.next = p;
                 cur = cur.next;
                 s.add(p.val);
             }
-            p = p.next;
         }
         cur.next = null;
         return head;
-
     }
+}
+```
+
+### **JavaScript**
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+ var removeDuplicateNodes = function(head) {
+    if (head == null || head.next == null) return head;
+    const cache = new Set([]);
+    cache.add(head.val);
+    let cur = head, fast = head.next;
+    while (fast !== null) {
+        if (!cache.has(fast.val)) {
+            cur.next = fast;
+            cur = cur.next;
+            cache.add(fast.val);
+        }
+        fast = fast.next;
+    }
+    cur.next = null;
+    return head;
+};
+```
+
+### **C++**
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeDuplicateNodes(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) {
+            return head;
+        }
+        unordered_set<int> cache = {head->val};
+        ListNode *cur = head;
+        for (ListNode *p = head->next; p != nullptr; p = p->next) {
+            if (!cache.count(p->val)) {
+                cur->next = p;
+                cur = cur->next;
+                cache.insert(p->val);
+            }
+        }
+        cur->next = nullptr;
+        return head;
+    }
+};
+```
+
+### **Go**
+
+```go
+func removeDuplicateNodes(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+	vis := map[int]bool{head.Val: true}
+	p := head
+	for p.Next != nil {
+		if vis[p.Next.Val] {
+			p.Next = p.Next.Next
+		} else {
+			vis[p.Next.Val] = true
+			p = p.Next
+		}
+	}
+	return head
 }
 ```
 

@@ -33,7 +33,7 @@
 
 <p><strong>示例 3:</strong></p>
 
-<pre><strong>输入:</strong> amount = 10, coins = [10] 
+<pre><strong>输入:</strong> amount = 10, coins = [10]
 <strong>输出:</strong> 1
 </pre>
 
@@ -55,6 +55,10 @@
 
 <!-- 这里可写通用的实现逻辑 -->
 
+动态规划。
+
+完全背包问题。
+
 <!-- tabs:start -->
 
 ### **Python3**
@@ -62,7 +66,14 @@
 <!-- 这里可写当前语言的特殊实现逻辑 -->
 
 ```python
-
+class Solution:
+    def change(self, amount: int, coins: List[int]) -> int:
+        dp = [0] * (amount + 1)
+        dp[0] = 1
+        for coin in coins:
+            for j in range(coin, amount + 1):
+                dp[j] += dp[j - coin]
+        return dp[-1]
 ```
 
 ### **Java**
@@ -70,7 +81,116 @@
 <!-- 这里可写当前语言的特殊实现逻辑 -->
 
 ```java
+class Solution {
+    public int change(int amount, int[] coins) {
+        int m = coins.length;
+        int[][] dp = new int[m + 1][amount + 1];
+        dp[0][0] = 1;
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 0; j <= amount; ++j) {
+                for (int k = 0; k * coins[i - 1] <= j; ++k) {
+                    dp[i][j] += dp[i - 1][j - coins[i - 1] * k];
+                }
+            }
+        }
+        return dp[m][amount];
+    }
+}
+```
 
+下面对 k 这层循环进行优化：
+
+由于：
+
+- `dp[i][j] = dp[i - 1][j] + dp[i - 1][j - v] + dp[i - 1][j - 2v] + ... + dp[i - 1][j - kv]`
+- `dp[i][j - v] =            dp[i - 1][j - v] + dp[i - 1][j - 2v] + ... + dp[i - 1][j - kv]`
+
+因此 `dp[i][j] = dp[i - 1][j] + dp[i][j - v]`。
+
+```java
+class Solution {
+    public int change(int amount, int[] coins) {
+        int m = coins.length;
+        int[][] dp = new int[m + 1][amount + 1];
+        dp[0][0] = 1;
+        for (int i = 1; i <= m; ++i) {
+            int v = coins[i - 1];
+            for (int j = 0; j <= amount; ++j) {
+                dp[i][j] = dp[i - 1][j];
+                if (j >= v) {
+                    dp[i][j] += dp[i][j - v];
+                }
+            }
+        }
+        return dp[m][amount];
+    }
+}
+```
+
+空间优化：
+
+```java
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        for (int coin : coins) {
+            // 顺序遍历，0-1背包问题是倒序遍历
+            for (int j = coin; j <= amount; j++) {
+                dp[j] += dp[j - coin];
+            }
+        }
+        return dp[amount];
+    }
+}
+```
+
+### **TypeScript**
+
+```ts
+function change(amount: number, coins: number[]): number {
+    let dp = new Array(amount + 1).fill(0);
+    dp[0] = 1;
+    for (let coin of coins) {
+        for (let i = coin; i <= amount; ++i) {
+            dp[i] += dp[i - coin];
+        }
+    }
+    return dp.pop();
+};
+```
+
+### **Go**
+
+```go
+func change(amount int, coins []int) int {
+	dp := make([]int, amount+1)
+	dp[0] = 1
+	for _, coin := range coins {
+		for j := coin; j <= amount; j++ {
+			dp[j] += dp[j-coin]
+		}
+	}
+	return dp[amount]
+}
+```
+
+### **C++**
+
+```cpp
+class Solution {
+public:
+    int change(int amount, vector<int>& coins) {
+        vector<int> dp(amount + 1);
+        dp[0] = 1;
+        for (auto coin : coins) {
+            for (int j = coin; j <= amount; ++j) {
+                dp[j] += dp[j - coin];
+            }
+        }
+        return dp[amount];
+    }
+};
 ```
 
 ### **...**

@@ -53,18 +53,93 @@
 
 ## Solutions
 
+Use deque or stack to simulate the reversal process.
+
 <!-- tabs:start -->
 
 ### **Python3**
 
 ```python
-
+class Solution:
+    def reverseParentheses(self, s: str) -> str:
+        stack = []
+        for c in s:
+            if c == ")":
+                tmp = []
+                while stack[-1] != "(":
+                    tmp += stack.pop()
+                stack.pop()
+                stack += tmp
+            else:
+                stack.append(c)
+        return "".join(stack)
 ```
 
 ### **Java**
 
 ```java
+class Solution {
+    public String reverseParentheses(String s) {
+        Deque<Character> deque = new ArrayDeque<>();
+        for (char c : s.toCharArray()) {
+            if (c == ')') {
+                StringBuilder sb = new StringBuilder();
+                while (deque.peekLast() != '(') {
+                    sb.append(deque.pollLast());
+                }
+                deque.pollLast();
+                for (int i = 0, n = sb.length(); i < n; i++) {
+                    deque.offerLast(sb.charAt(i));
+                }
+            } else {
+                deque.offerLast(c);
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        while (!deque.isEmpty()) {
+            sb.append(deque.pollFirst());
+        }
+        return sb.toString();
+    }
+}
+```
 
+### **JavaScript**
+
+```js
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var reverseParentheses = function(s) {
+    let stack = [];
+    let hashMap = {};
+    const n = s.length;
+    for (let i = 0; i < n; i++) {
+        let cur = s.charAt(i);
+        if (cur == '(') {
+            stack.push(i);
+        } else if (cur == ')') {
+            let left = stack.pop();
+            hashMap[left] = i;
+            hashMap[i] = left;
+        }
+    }
+    let res = [];
+    let i = 0;
+    let step = 1; // 1向右，-1向左
+    while (i > -1 && i < n) {
+        let cur = s.charAt(i);
+        if (cur == '(' || cur == ')') {
+            step = -step;
+            i = hashMap[i];
+        } else {
+            res.push(cur);
+        }
+        i += step;
+    }
+    return res.join('');
+};
 ```
 
 ### **...**

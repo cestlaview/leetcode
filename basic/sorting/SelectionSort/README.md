@@ -42,7 +42,7 @@ public class SelectionSort {
 
 ### **JavaScript**
 
-```javascript
+```js
 function selectionSort(inputArr) {
     let len = inputArr.length;
     for (let i = 0; i <= len - 2; i++) {
@@ -62,6 +62,106 @@ function selectionSort(inputArr) {
 
 let arr = [6, 3, 2, 1, 5];
 console.log(selectionSort(arr))
+```
+
+### **Go**
+
+```go
+package main
+
+import "fmt"
+
+func selectionSort(nums []int) {
+	for i, n := 0, len(nums); i < n-1; i++ {
+		minIndex := i
+		for j := i + 1; j < n; j++ {
+			if nums[j] < nums[minIndex] {
+				minIndex = j
+			}
+		}
+		nums[minIndex], nums[i] = nums[i], nums[minIndex]
+	}
+}
+
+func main() {
+	nums := []int{1, 2, 7, 9, 5, 8}
+	selectionSort(nums)
+	fmt.Println(nums)
+}
+```
+
+### **C++**
+
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void printvec( const vector<int> &vec, const string &strbegin = "", const string &strend = "" )
+{
+    cout << strbegin << endl;
+    for ( auto val : vec )
+    {
+        cout << val << "\t";
+    }
+
+    cout << endl;
+    cout << strend << endl;
+}
+
+
+void selectsort( vector<int> & vec )
+{
+    for ( int i = 0; i < vec.size() - 1; i++ )
+    {
+        int minidx = i;
+        for ( int j = i + 1; j < vec.size(); j++ )
+        {
+            if ( vec[minidx] > vec[j] )
+            {
+                minidx = j;
+            }
+        }
+
+        swap( vec[i], vec[minidx] );
+    }
+}
+
+
+int main( void )
+{
+    vector<int> vec = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+    printvec( vec );
+    selectsort( vec );
+    printvec( vec, "after insert sort" );
+    return(0);
+}
+```
+
+### **Rust**
+
+```rust
+fn selection_sort(nums: &mut Vec<i32>) {
+    let n = nums.len();
+    for i in 0..n - 1 {
+        let mut min_index = i;
+        for j in i..n {
+            if nums[j] < nums[min_index] {
+                min_index = j;
+            }
+        }
+        let temp = nums[min_index];
+        nums[min_index] = nums[i];
+        nums[i] = temp;
+    }
+}
+
+fn main() {
+    let mut nums = vec![1, 2, 7, 9, 5, 8];
+    selection_sort(&mut nums);
+    println!("{:?}", nums);
+}
 ```
 
 <!-- tabs:end -->

@@ -28,21 +28,104 @@ Employee 1 has importance value 5, and he has two direct subordinates: employee 
 	<li>The maximum number of employees won&#39;t exceed 2000.</li>
 </ol>
 
-
 ## Solutions
+
+"all their subordinates" include "subordinates of subordinates", first use a hash table to store the mapping relationship between `employee.id` and `employee`, and then recursively solve it (it can also be implemented with BFS)
 
 <!-- tabs:start -->
 
 ### **Python3**
 
 ```python
+"""
+# Definition for Employee.
+class Employee:
+    def __init__(self, id: int, importance: int, subordinates: List[int]):
+        self.id = id
+        self.importance = importance
+        self.subordinates = subordinates
+"""
 
+class Solution:
+    def getImportance(self, employees: List['Employee'], id: int) -> int:
+        m = {emp.id: emp for emp in employees}
+
+        def dfs(id: int) -> int:
+            emp = m[id]
+            s = emp.importance
+            for sub in emp.subordinates:
+                s += dfs(sub)
+            return s
+
+        return dfs(id)
 ```
 
 ### **Java**
 
 ```java
+/*
+// Definition for Employee.
+class Employee {
+    public int id;
+    public int importance;
+    public List<Integer> subordinates;
+};
+*/
 
+class Solution {
+
+    private final Map<Integer, Employee> map = new HashMap<>();
+
+    public int getImportance(List<Employee> employees, int id) {
+        for (Employee employee : employees) {
+            map.put(employee.id, employee);
+        }
+        return dfs(id);
+    }
+
+    private int dfs(int id) {
+        Employee employee = map.get(id);
+        int sum = employee.importance;
+        for (Integer subordinate : employee.subordinates) {
+            sum += dfs(subordinate);
+        }
+        return sum;
+    }
+}
+```
+
+### **JavaScript**
+
+```js
+/**
+ * Definition for Employee.
+ * function Employee(id, importance, subordinates) {
+ *     this.id = id;
+ *     this.importance = importance;
+ *     this.subordinates = subordinates;
+ * }
+ */
+
+/**
+ * @param {Employee[]} employees
+ * @param {number} id
+ * @return {number}
+ */
+var GetImportance = function (employees, id) {
+  const map = new Map();
+  for (const employee of employees) {
+    map.set(employee.id, employee);
+  }
+  const dfs = (id) => {
+    const employee = map.get(id);
+    let sum = employee.importance;
+    for (const subId of employee.subordinates) {
+      sum += dfs(subId);
+    }
+    return sum;
+  };
+  return dfs(id);
+};
 ```
 
 ### **...**

@@ -160,6 +160,61 @@ func helper(preorder, inorder []int, index, start, end int) *TreeNode {
 }
 ```
 
+### **C++**
+
+```cpp
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return build(preorder, inorder, 0, preorder.size() - 1, 0, inorder.size() - 1);
+    }
+
+private:
+    TreeNode* build(vector<int>& preorder, vector<int>& inorder, int pre_l, int pre_r, int in_l, int in_r) {
+        if (pre_l > pre_r || in_l > in_r) {
+            return NULL;
+        }
+        int root = preorder[pre_l];
+        int i = in_l;
+        while (i <= in_r && inorder[i] != root) {
+            ++i;
+        }
+        TreeNode* node = new TreeNode(root);
+        node->left = build(preorder, inorder, pre_l + 1, pre_l + i - in_l, in_l, i - 1);
+        node->right = build(preorder, inorder, pre_l + i - in_l + 1, pre_r, i + 1, in_r);
+        return node;
+    }
+};
+```
+
+### **TypeScript**
+
+```ts
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
+    if (preorder.length == 0) return null;
+    let val: number = preorder[0];
+    let node: TreeNode = new TreeNode(val);
+    let index: number = inorder.indexOf(val);
+    node.left = buildTree(preorder.slice(1, index + 1), inorder.slice(0, index));
+    node.right = buildTree(preorder.slice(index + 1), inorder.slice(index + 1));
+    return node;
+};
+```
+
 ### **...**
 
 ```

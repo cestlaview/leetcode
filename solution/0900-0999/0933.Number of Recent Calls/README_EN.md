@@ -42,7 +42,6 @@ recentCounter.ping(3002);  // requests = [1, <u>100</u>, <u>3001</u>, <u>3002</u
 	<li>At most <code>10<sup>4</sup></code> calls will be made to <code>ping</code>.</li>
 </ul>
 
-
 ## Solutions
 
 <!-- tabs:start -->
@@ -53,13 +52,12 @@ recentCounter.ping(3002);  // requests = [1, <u>100</u>, <u>3001</u>, <u>3002</u
 class RecentCounter:
 
     def __init__(self):
-        self.q = []
-
+        self.q = collections.deque()
 
     def ping(self, t: int) -> int:
         self.q.append(t)
         while self.q[0] < t - 3000:
-            self.q.pop(0)
+            self.q.popleft()
         return len(self.q)
 
 
@@ -72,13 +70,12 @@ class RecentCounter:
 
 ```java
 class RecentCounter {
-
     private Deque<Integer> q;
 
     public RecentCounter() {
-        q = new ArrayDeque<>();
+        q = new LinkedList<>();
     }
-
+    
     public int ping(int t) {
         q.offerLast(t);
         while (q.peekFirst() < t - 3000) {
@@ -92,6 +89,87 @@ class RecentCounter {
  * Your RecentCounter object will be instantiated and called as such:
  * RecentCounter obj = new RecentCounter();
  * int param_1 = obj.ping(t);
+ */
+```
+
+### **C++**
+
+```cpp
+class RecentCounter {
+public:
+    deque<int> q;
+
+    RecentCounter() {
+
+    }
+    
+    int ping(int t) {
+        q.push_back(t);
+        while (q.front() < t - 3000) {
+            q.pop_front();
+        }
+        return q.size();
+    }
+};
+
+/**
+ * Your RecentCounter object will be instantiated and called as such:
+ * RecentCounter* obj = new RecentCounter();
+ * int param_1 = obj->ping(t);
+ */
+```
+
+### **Go**
+
+```go
+type RecentCounter struct {
+	q []int
+}
+
+func Constructor() RecentCounter {
+	return RecentCounter{
+		q: []int{},
+	}
+}
+
+func (this *RecentCounter) Ping(t int) int {
+	this.q = append(this.q, t)
+	for this.q[0] < t-3000 {
+		this.q = this.q[1:len(this.q)]
+	}
+	return len(this.q)
+}
+
+/**
+ * Your RecentCounter object will be instantiated and called as such:
+ * obj := Constructor();
+ * param_1 := obj.Ping(t);
+ */
+```
+
+### **JavaScript**
+
+```js
+var RecentCounter = function() {
+    this.q = [];
+};
+
+/** 
+ * @param {number} t
+ * @return {number}
+ */
+RecentCounter.prototype.ping = function(t) {
+    this.q.push(t);
+    while (this.q[0] < t - 3000) {
+        this.q.shift();
+    }
+    return this.q.length;
+};
+
+/**
+ * Your RecentCounter object will be instantiated and called as such:
+ * var obj = new RecentCounter()
+ * var param_1 = obj.ping(t)
  */
 ```
 

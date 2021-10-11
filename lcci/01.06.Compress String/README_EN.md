@@ -61,23 +61,75 @@ class Solution:
 ```java
 class Solution {
     public String compressString(String S) {
-        if (S == null || S.length() < 2) {
+        int n;
+        if (S == null || (n = S.length()) < 2) {
             return S;
         }
-        char[] chars = S.toCharArray();
-        int p = 0, q = 1, n = chars.length;
+        int p = 0, q = 1;
         StringBuilder sb = new StringBuilder();
         while (q < n) {
-            if (chars[p] != chars[q]) {
-                sb.append(chars[p]).append(q - p);
+            if (S.charAt(p) != S.charAt(q)) {
+                sb.append(S.charAt(p)).append(q - p);
                 p = q;
             }
-            q += 1;
+            ++q;
         }
-        sb.append(chars[p]).append(q - p);
+        sb.append(S.charAt(p)).append(q - p);
         String res = sb.toString();
         return res.length() < n ? res : S;
     }
+}
+```
+
+### **JavaScript**
+
+```js
+/**
+ * @param {string} S
+ * @return {string}
+ */
+var compressString = function(S) {
+    if (!S) return S;
+    let p = 0, q = 1;
+    let res = '';
+    while (q < S.length) {
+        if (S[p] != S[q]) {
+            res += (S[p] + (q - p));
+            p = q;
+        }
+        ++q;
+    }
+    res += (S[p] + (q - p));
+    return res.length < S.length ? res : S;
+};
+```
+
+### **Go**
+
+```go
+func compressString(S string) string {
+	n := len(S)
+	if n == 0 {
+		return S
+	}
+	var builder strings.Builder
+	pre, cnt := S[0], 1
+	for i := 1; i < n; i++ {
+		if S[i] != pre {
+			builder.WriteByte(pre)
+			builder.WriteString(strconv.Itoa(cnt))
+			cnt = 1
+		} else {
+			cnt++
+		}
+		pre = S[i]
+	}
+	builder.WriteByte(pre)
+	builder.WriteString(strconv.Itoa(cnt))
+	if builder.Len() >= n {
+		return S
+	}
+	return builder.String()
 }
 ```
 

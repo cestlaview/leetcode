@@ -112,6 +112,33 @@ func fib(n int) int {
 }
 ```
 
+### **TypeScript**
+
+```ts
+function fib(n: number): number {
+    let a: number = 0, b: number = 1;
+    for (let i: number = 0; i < n; i++) {
+        let c: number = (a + b) % 1000000007;
+        [a, b] = [b, c];
+    }
+    return a;
+};
+```
+
+### **Rust**
+
+```rust
+impl Solution {
+    pub fn fib(n: i32) -> i32 {
+        let mut tup = (0, 1);
+        for _ in 0..n {
+            tup = (tup.1, (tup.0 + tup.1) % 1000000007);
+        }
+        return tup.0;
+    }
+}
+```
+
 ### **...**
 
 ```

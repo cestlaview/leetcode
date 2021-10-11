@@ -25,7 +25,6 @@
 	<li>All the characters of&nbsp;<code>jewels</code> are <strong>unique</strong>.</li>
 </ul>
 
-
 ## Solutions
 
 <!-- tabs:start -->
@@ -33,13 +32,65 @@
 ### **Python3**
 
 ```python
-
+class Solution:
+    def numJewelsInStones(self, jewels: str, stones: str) -> int:
+        s = set(jewels)
+        return sum([1 for c in stones if c in s])
 ```
 
 ### **Java**
 
 ```java
+class Solution {
+    public int numJewelsInStones(String jewels, String stones) {
+        Set<Character> s = new HashSet<>();
+        for (char c : jewels.toCharArray()) {
+            s.add(c);
+        }
+        int res = 0;
+        for (char c : stones.toCharArray()) {
+            res += (s.contains(c) ? 1 : 0);
+        }
+        return res;
+    }
+}
+```
 
+### **C++**
+
+```cpp
+class Solution {
+public:
+    int numJewelsInStones(string jewels, string stones) {
+        unordered_set<char> s;
+        for (char c : jewels) {
+            s.insert(c);
+        }
+        int res = 0;
+        for (char c : stones) {
+            res += s.count(c);
+        }
+        return res;
+    }
+};
+```
+
+### **Go**
+
+```go
+func numJewelsInStones(jewels string, stones string) int {
+	s := make(map[rune]bool)
+	for _, c := range jewels {
+		s[c] = true
+	}
+	res := 0
+	for _, c := range stones {
+		if s[c] {
+			res++
+		}
+	}
+	return res
+}
 ```
 
 ### **...**

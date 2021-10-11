@@ -33,7 +33,20 @@
 
 <!-- 这里可写通用的实现逻辑 -->
 
-双端队列实现。
+单调队列。
+
+单调队列常见模型：找出滑动窗口中的最大值/最小值。模板：
+
+```python
+q = deque()
+for i in range(n):
+    # 判断队头是否滑出窗口
+    while q and checkout_out(q[0]):
+        q.popleft()
+    while q and check(q[-1]):
+        q.pop()
+    q.append(i)
+```
 
 <!-- tabs:start -->
 
@@ -44,14 +57,13 @@
 ```python
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-        q, res = [], []
+        q, res = collections.deque(), []
         for i, num in enumerate(nums):
-            while len(q) != 0 and nums[q[-1]] <= num:
-                q.pop(-1)
+            if q and i - k + 1 > q[0]:
+                q.popleft()
+            while q and nums[q[-1]] <= num:
+                q.pop()
             q.append(i)
-
-            if q[0] == i - k:
-                q = q[1:]
             if i >= k - 1:
                 res.append(nums[q[0]])
         return res
@@ -120,6 +132,54 @@ var maxSlidingWindow = function (nums, k) {
   }
   return res;
 };
+```
+
+### **C++**
+
+```cpp
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        vector<int> ans;
+        deque<int> window;
+        int n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            while (!window.empty() && nums[window.back()] <= nums[i]) {
+                window.pop_back();
+            }
+            window.push_back(i);
+            if (window.front() == i - k) {
+                window.pop_front();
+            }
+            if (i >= k - 1) {
+                ans.push_back(nums[window.front()]);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+### **Go**
+
+```go
+func maxSlidingWindow(nums []int, k int) []int {
+	ans := make([]int, 0, len(nums)-k+1)
+	window := make([]int, 0)
+	for i, num := range nums {
+		for len(window) != 0 && nums[window[len(window)-1]] <= num {
+			window = window[:len(window)-1]
+		}
+		window = append(window, i)
+		if window[0] == i-k {
+			window = window[1:]
+		}
+		if i >= k-1 {
+			ans = append(ans, nums[window[0]])
+		}
+	}
+	return ans
+}
 ```
 
 ### **...**

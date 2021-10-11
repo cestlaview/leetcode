@@ -10,7 +10,7 @@
 <p><strong>示例 1：</strong></p>
 
 <pre><strong>输入:</strong> <code>s1</code> = &quot;abc&quot;, <code>s2</code> = &quot;bca&quot;
-<strong>输出:</strong> true 
+<strong>输出:</strong> true
 </pre>
 
 <p><strong>示例 2：</strong></p>
@@ -78,6 +78,45 @@ class Solution {
         }
         return true;
     }
+}
+```
+
+### **JavaScript**
+
+```js
+var CheckPermutation = function(s1, s2) {
+    let n1 = s1.length, n2 = s2.length;
+    if (n1 != n2) return false;
+    let counter = {};
+    for (let i = 0; i < n1; i++) {
+        let cur1 = s1.charAt(i), cur2 = s2.charAt(i);
+        counter[cur1] = (counter[cur1] || 0) + 1;
+        counter[cur2] = (counter[cur2] || 0) - 1;
+    }
+    return Object.values(counter).every(v => v == 0);
+};
+```
+
+### **Go**
+
+```go
+func CheckPermutation(s1 string, s2 string) bool {
+	freq := make(map[rune]int)
+	for _, r := range s1 {
+		freq[r]++
+	}
+	for _, r := range s2 {
+		if freq[r] == 0 {
+			return false
+		}
+		freq[r]--
+	}
+	for _, v := range freq {
+		if v != 0 {
+			return false
+		}
+	}
+	return true
 }
 ```
 

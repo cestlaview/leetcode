@@ -16,7 +16,7 @@
 <pre>
 <strong>Input:</strong> nums = [2,7,11,15], target = 9
 <strong>Output:</strong> [0,1]
-<strong>Output:</strong> Because nums[0] + nums[1] == 9, we return [0, 1].
+<strong>Explanation:</strong> Because nums[0] + nums[1] == 9, we return [0, 1].
 </pre>
 
 <p><strong>Example 2:</strong></p>
@@ -67,7 +67,7 @@ class Solution:
 class Solution {
     public int[] twoSum(int[] nums, int target) {
         Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 0, n = nums.length; i < n; ++i) {
+        for (int i = 0; i < nums.length; ++i) {
             int num = target - nums[i];
             if (map.containsKey(num)) {
                 return new int[]{map.get(num), i};
@@ -77,6 +77,97 @@ class Solution {
         return null;
     }
 }
+```
+
+### **C++**
+
+```cpp
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> map;
+        for (int i = 0; i < nums.size(); ++i) {
+            int num = target - nums[i];
+            if (map.find(num) != map.end()) {
+                return {map[num], i};
+            }
+            map[nums[i]] = i;
+        }
+        return {};
+    }
+};
+```
+
+### **Go**
+
+```go
+func twoSum(nums []int, target int) []int {
+	numMap := make(map[int]int)
+	for i, num := range nums {
+		other := target - num
+		if _, ok := numMap[other]; ok {
+			return []int{numMap[other], i}
+		}
+		numMap[num] = i
+	}
+	return nil
+}
+```
+
+### **JavaScript**
+
+```js
+var twoSum = function (nums, target) {
+  const map = new Map();
+  for (let i = 0; i < nums.length; i++) {
+    if (map.has(target - nums[i])) {
+      return [map.get(target - nums[i]), i];
+    }
+    map.set(nums[i], i);
+  }
+  return [];
+};
+```
+
+### **Swift**
+
+```swift
+class Solution {
+    func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+        var map = [Int: Int]()
+        var i = 0
+        for num in nums {
+            map[num] = i
+            i = i + 1
+        }
+        i = 0
+        for num in nums {
+            if let otherIndex = map[target - num], otherIndex != i {
+                return [i, otherIndex]
+            }
+            i = i + 1
+        }
+        return []
+    }
+}
+```
+
+### **Nim**
+
+```nim
+import std/enumerate
+
+proc twoSum(nums: seq[int], target: int): seq[int] =
+    var
+        bal: int
+        tdx: int
+    for idx, val in enumerate(nums):
+        bal = target - val
+        if bal in nums:
+            tdx = nums.find(bal)
+            if idx != tdx:
+                return @[idx, tdx]
+
 ```
 
 ### **...**

@@ -35,7 +35,7 @@
 <pre>
 <strong>输入：</strong>nums = [-1,-100,3,99], k = 2
 <strong>输出：</strong>[3,99,-1,-100]
-<strong>解释:</strong> 
+<strong>解释:</strong>
 向右旋转 1 步: [99,-1,-100,3]
 向右旋转 2 步: [3,99,-1,-100]</pre>
 
@@ -116,6 +116,44 @@ class Solution {
             --j;
         }
     }
+}
+```
+
+### **JavaScript**
+
+<!-- 这里可写当前语言的特殊实现逻辑 -->
+使用原生 API 将数组的 `k~n-1` 范围内的元素插入到前面
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var rotate = function (nums, k) {
+    k %= nums.length;
+    nums.splice(0, 0, ...nums.splice(-k, k))
+};
+```
+
+### **Go**
+
+```go
+func rotate(nums []int, k int) {
+	n := len(nums)
+	k %= n
+
+	reverse(nums, 0, n-1)
+	reverse(nums, 0, k-1)
+	reverse(nums, k, n-1)
+}
+
+func reverse(nums []int, i, j int) {
+	for i < j {
+		nums[i], nums[j] = nums[j], nums[i]
+		i++
+		j--
+	}
 }
 ```
 

@@ -97,13 +97,26 @@ Where &quot;^&quot; corresponds to bitwise XOR operator.
 ### **Python3**
 
 ```python
-
+class Solution:
+    def xorOperation(self, n: int, start: int) -> int:
+        res = 0
+        for i in range(n):
+            res ^= (start + (i << 1))
+        return res
 ```
 
 ### **Java**
 
 ```java
-
+class Solution {
+  public int xorOperation(int n, int start) {
+    int ret = start;
+    for (int i = 1; i < n; i++) {
+      ret = ret ^ (start + (i << 1));
+    }
+    return ret;
+  }
+}
 ```
 
 ### **...**

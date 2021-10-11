@@ -70,13 +70,42 @@
 ### **Python3**
 
 ```python
-
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        words = s.strip().split()
+        return ' '.join(words[::-1])
 ```
 
 ### **Java**
 
 ```java
+class Solution {
+    public String reverseWords(String s) {
+        List<String> words = Arrays.asList(s.trim().split("\\s+"));
+        Collections.reverse(words);
+        return String.join(" ", words);
+    }
+}
+```
 
+### **C#**
+
+```cs
+public class Solution {
+    public string ReverseWords(string s) {
+         return string.Join(" ", s.Trim().Split(" ").Where(word => !string.IsNullOrEmpty(word) && !string.IsNullOrEmpty(word.Trim())).Reverse());
+    }
+}
+```
+
+### **TypeScript**
+
+```ts
+function reverseWords(s: string): string {
+    let words: string[] = s.trim().split(/\s+/g);
+    words.reverse();
+    return words.join(' ');
+};
 ```
 
 ### **...**

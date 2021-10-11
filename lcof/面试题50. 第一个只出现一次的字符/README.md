@@ -31,13 +31,9 @@ s = ""
 ### **Python3**
 
 ```python
-import collections
-
 class Solution:
     def firstUniqChar(self, s: str) -> str:
-        counter = collections.Counter()
-        for c in s:
-            counter[c] += 1
+        counter = collections.Counter(s)
         for c in s:
             if counter[c] == 1:
                 return c
@@ -84,6 +80,26 @@ var firstUniqChar = function (s) {
     if (counter[index] == 1) return s[i];
   }
   return " ";
+};
+```
+
+### **C++**
+
+```cpp
+class Solution {
+public:
+    char firstUniqChar(string s) {
+        unordered_map<char, bool> um;
+        for (char c : s) {
+            um[c] = um.find(c) == um.end();
+        }
+        for (char c : s) {
+            if (um[c]) {
+                return c;
+            }
+        }
+        return ' ';
+    }
 };
 ```
 

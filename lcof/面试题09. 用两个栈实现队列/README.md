@@ -174,6 +174,78 @@ func (this *CQueue) DeleteHead() int {
 }
 ```
 
+### **C++**
+
+```cpp
+class CQueue {
+private:
+    stack<int> s1, s2;
+
+public:
+    CQueue() {
+    }
+
+    void appendTail(int value) {
+        s1.push(value);
+    }
+
+    int deleteHead() {
+        if (s2.empty()) {
+            while (!s1.empty()) {
+                s2.push(s1.top());
+                s1.pop();
+            }
+        }
+        if (s2.empty()) {
+            return -1;
+        }
+        int head = s2.top();
+        s2.pop();
+        return head;
+    }
+};
+```
+
+### **TypeScript**
+
+```ts
+class CQueue {
+    private stack1: number[];
+    private stack2: number[];
+    constructor() {
+        this.stack1 = [];
+        this.stack2 = [];
+    }
+
+    appendTail(value: number): void {
+        this.stack1.push(value);
+        if (this.stack2.length == 0) {
+            this.move();
+        }
+    }
+
+    move(): void {
+        while (this.stack1.length != 0) {
+            this.stack2.push(this.stack1.pop());
+        }
+    }
+
+    deleteHead(): number {
+        if (this.stack2.length == 0) {
+            this.move();
+        }
+        return this.stack2.length == 0 ? -1 : this.stack2.pop();
+    }
+}
+
+/**
+ * Your CQueue object will be instantiated and called as such:
+ * var obj = new CQueue()
+ * obj.appendTail(value)
+ * var param_2 = obj.deleteHead()
+ */
+```
+
 ### **...**
 
 ```

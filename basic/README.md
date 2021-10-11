@@ -7,8 +7,8 @@
 - [选择排序](./sorting/SelectionSort/README.md)
 - [归并排序](./sorting/MergeSort/README.md)
 - [快速排序](./sorting/QuickSort/README.md)
+- [堆排序](./sorting/HeapSort/README.md)
 
 ## 查找算法
 
 - [二分查找](./searching/BinarySearch/README.md)
-- [二分查找 II](./searching/BinarySearch-II/README.md)
